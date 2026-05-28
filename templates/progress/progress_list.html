@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Progressi — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-graph-up"></i> I tuoi Progressi</h2>
+  <a href="{% url 'progress_add' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> Aggiungi Progresso
+  </a>
+</div>
+{% if entries %}
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Data</th>
+              <th>Valore</th>
+              <th>Obiettivo</th>
+              <th>Note</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+              <tr>
+                <td>{{ entry.date }}</td>
+                <td><strong>{{ entry.value }}</strong></td>
+                <td>
+                  {% if entry.goal %}
+                    <a href="{% url 'goal_detail' entry.goal.pk %}" class="text-decoration-none">
+                      {{ entry.goal.title|truncatechars:40 }}
+                    </a>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td><small class="text-muted">{{ entry.notes|truncatechars:50 }}</small></td>
+                <td>
+                  <a href="{% url 'progress_edit' entry.pk %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <a href="{% url 'progress_delete' entry.pk %}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    Nessun progresso registrato. <a href="{% url 'progress_add' %}">Aggiungi il primo!</a>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Profilo {{ target_user.username }} — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-person"></i> {{ target_user.username }}</h2>
+  <a href="{% url 'coach_feedback_create' target_user.pk %}" class="btn btn-success">
+    <i class="bi bi-chat-dots"></i> Invia Feedback
+  </a>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body text-center">
+        {% if target_user.avatar %}
+          <img src="{{ target_user.avatar.url }}" class="rounded-circle mb-2" width="80" height="80" alt="">
+        {% else %}
+          <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-2" style="width:80px;height:80px">
+            <i class="bi bi-person fs-2 text-white"></i>
+          </div>
+        {% endif %}
+        <h5>{{ target_user.username }}</h5>
+        <span class="badge bg-primary">{{ target_user.get_role_display }}</span>
+        {% if target_user.bio %}<p class="mt-2 text-muted">{{ target_user.bio }}</p>{% endif %}
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-header"><strong><i class="bi bi-trophy"></i> Goals</strong></div>
+      <div class="card-body">
+        {% for goal in goals %}{% include "partials/goal_card.html" %}{% empty %}<p class="text-muted">Nessun obiettivo.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-header"><strong><i class="bi bi-lightning"></i> Workout Recenti</strong></div>
+      <div class="card-body">
+        {% for workout in workouts %}{% include "partials/workout_card.html" %}{% empty %}<p class="text-muted">Nessun workout.</p>{% endfor %}
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header"><strong><i class="bi bi-graph-up"></i> Progressi Recenti</strong></div>
+      <div class="card-body">
+        {% for entry in progress_entries %}
+          <div class="d-flex justify-content-between border-bottom py-1">
+            <div>
+              <span class="fw-semibold">{{ entry.value }}</span>
+              {% if entry.goal %}<small class="text-muted ms-1">— {{ entry.goal.title }}</small>{% endif %}
+            </div>
+            <small class="text-muted">{{ entry.date }}</small>
+          </div>
+        {% empty %}<p class="text-muted">Nessun progresso.</p>{% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><strong><i class="bi bi-chat-dots"></i> Feedback Inviati</strong></div>
+      <div class="card-body">
+        {% for fb in feedbacks %}
+          <div class="border-bottom mb-2 pb-2">
+            <div class="d-flex justify-content-between">
+              <span class="fw-semibold">Feedback del {{ fb.date }}</span>
+            </div>
+            <p class="mb-0">{{ fb.message }}</p>
+          </div>
+        {% empty %}<p class="text-muted">Nessun feedback inviato.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ workout.title }} — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h2>{{ workout.title }}</h2>
+    <p class="text-muted">
+      <i class="bi bi-calendar3"></i> {{ workout.date }}
+      &nbsp;|&nbsp;
+      <i class="bi bi-clock"></i> {{ workout.duration }} min
+    </p>
+    {% if workout.notes %}<p>{{ workout.notes }}</p>{% endif %}
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'workout_edit' workout.pk %}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-pencil"></i> Modifica
+    </a>
+    <a href="{% url 'workout_delete' workout.pk %}" class="btn btn-outline-danger btn-sm">
+      <i class="bi bi-trash"></i> Elimina
+    </a>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <strong><i class="bi bi-list-check"></i> Esercizi</strong>
+    <a href="{% url 'exercise_add' workout.pk %}" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus"></i> Aggiungi Esercizio
+    </a>
+  </div>
+  <div class="card-body p-0">
+    {% if exercises %}
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Esercizio</th>
+              <th>Categoria</th>
+              <th>Serie</th>
+              <th>Reps</th>
+              <th>Peso (kg)</th>
+              <th>Distanza (km)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for we in exercises %}
+              <tr>
+                <td><strong>{{ we.exercise.name }}</strong></td>
+                <td>
+                  <span class="badge badge-{{ we.exercise.category }}">
+                    {{ we.exercise.get_category_display }}
+                  </span>
+                </td>
+                <td>{{ we.sets|default:"—" }}</td>
+                <td>{{ we.reps|default:"—" }}</td>
+                <td>{{ we.weight|default:"—" }}</td>
+                <td>{{ we.distance|default:"—" }}</td>
+                <td>
+                  <a href="{% url 'exercise_delete' workout.pk we.pk %}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted text-center py-3">Nessun esercizio. <a href="{% url 'exercise_add' workout.pk %}">Aggiungine uno!</a></p>
+    {% endif %}
+  </div>
+</div>
+
+<a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">
+  <i class="bi bi-arrow-left"></i> Torna alla lista
+</a>
+{% endblock %}

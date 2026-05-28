@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">
+      <i class="bi bi-activity"></i> Fitness Tracker
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}"><i class="bi bi-house"></i> Dashboard</a>
+          </li>
+          {% if user.role == 'coach' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> My Workouts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'coach_clients' %}"><i class="bi bi-people"></i> My Clients</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> Workouts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'progress_list' %}"><i class="bi bi-graph-up"></i> Progress</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'goal_list' %}"><i class="bi bi-trophy"></i> Goals</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'feedback_list' %}"><i class="bi bi-chat-dots"></i> Feedback</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      </ul>
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i> {{ user.username }}</a>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Registrati</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

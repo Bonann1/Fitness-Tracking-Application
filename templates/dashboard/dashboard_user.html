@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-house-fill"></i> Dashboard</h2>
+  <span class="text-muted">Benvenuto, <strong>{{ request.user.username }}</strong></span>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-sm-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6 text-primary">{{ recent_workouts|length }}</div>
+        <div class="text-muted small">Workout recenti</div>
+        <a href="{% url 'workout_list' %}" class="btn btn-sm btn-outline-primary mt-2">Vedi tutti</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6 text-success">{{ active_goals|length }}</div>
+        <div class="text-muted small">Obiettivi attivi</div>
+        <a href="{% url 'goal_list' %}" class="btn btn-sm btn-outline-success mt-2">Vedi tutti</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6 text-warning">{{ recent_progress|length }}</div>
+        <div class="text-muted small">Progressi recenti</div>
+        <a href="{% url 'progress_list' %}" class="btn btn-sm btn-outline-warning mt-2">Vedi tutti</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong><i class="bi bi-bar-chart"></i> Workout per Settimana</strong>
+      </div>
+      <div class="card-body">
+        <canvas id="weeklyChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong><i class="bi bi-trophy"></i> Obiettivi Attivi</strong>
+        <a href="{% url 'goal_create' %}" class="btn btn-sm btn-success"><i class="bi bi-plus"></i></a>
+      </div>
+      <div class="card-body">
+        {% for goal in active_goals %}
+          {% include "partials/goal_card.html" %}
+        {% empty %}
+          <p class="text-muted text-center">Nessun obiettivo attivo.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mt-1">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong><i class="bi bi-lightning"></i> Workout Recenti</strong>
+        <a href="{% url 'workout_create' %}" class="btn btn-sm btn-primary"><i class="bi bi-plus"></i></a>
+      </div>
+      <div class="card-body">
+        {% for workout in recent_workouts %}
+          {% include "partials/workout_card.html" %}
+        {% empty %}
+          <p class="text-muted text-center">Nessun workout registrato.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong><i class="bi bi-graph-up"></i> Progressi Recenti</strong>
+        <a href="{% url 'progress_add' %}" class="btn btn-sm btn-warning"><i class="bi bi-plus"></i></a>
+      </div>
+      <div class="card-body">
+        {% for entry in recent_progress %}
+          <div class="d-flex justify-content-between border-bottom py-1">
+            <div>
+              <span class="fw-semibold">{{ entry.value }}</span>
+              {% if entry.goal %}<small class="text-muted ms-1">— {{ entry.goal.title }}</small>{% endif %}
+            </div>
+            <small class="text-muted">{{ entry.date }}</small>
+          </div>
+        {% empty %}
+          <p class="text-muted text-center">Nessun progresso registrato.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const ctx = document.getElementById('weeklyChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ chart_weeks|safe }},
+      datasets: [{
+        label: 'Workout',
+        data: {{ chart_counts|safe }},
+        backgroundColor: 'rgba(13,110,253,0.6)',
+        borderColor: '#0d6efd',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+    }
+  });
+</script>
+{% endblock %}

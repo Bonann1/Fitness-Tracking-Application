@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Obiettivi — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-trophy"></i> I tuoi Obiettivi</h2>
+  <a href="{% url 'goal_create' %}" class="btn btn-success">
+    <i class="bi bi-plus-lg"></i> Nuovo Obiettivo
+  </a>
+</div>
+
+{% if goals %}
+  <div class="row g-3">
+    {% for goal in goals %}
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="card-title">
+                <a href="{% url 'goal_detail' goal.pk %}" class="text-decoration-none">{{ goal.title }}</a>
+              </h5>
+              <span class="badge {% if goal.status == 'active' %}bg-success{% elif goal.status == 'completed' %}bg-primary{% else %}bg-secondary{% endif %}">
+                {{ goal.get_status_display }}
+              </span>
+            </div>
+            {% if goal.description %}<p class="text-muted small">{{ goal.description|truncatechars:100 }}</p>{% endif %}
+            <div class="small text-muted">
+              <span class="badge bg-light text-dark border">{{ goal.get_goal_type_display }}</span>
+              {% if goal.goal_type == 'metric' %}
+                &nbsp; Target: <strong>{{ goal.target_value }} {{ goal.get_metric_display }}</strong>
+              {% endif %}
+              {% if goal.deadline %}&nbsp; Scadenza: {{ goal.deadline }}{% endif %}
+            </div>
+          </div>
+          <div class="card-footer bg-transparent d-flex gap-2">
+            <a href="{% url 'goal_detail' goal.pk %}" class="btn btn-sm btn-outline-primary">Dettagli</a>
+            <a href="{% url 'goal_edit' goal.pk %}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+            <a href="{% url 'goal_delete' goal.pk %}" class="btn btn-sm btn-outline-danger">Elimina</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    Nessun obiettivo creato. <a href="{% url 'goal_create' %}">Crea il primo!</a>
+  </div>
+{% endif %}
+{% endblock %}

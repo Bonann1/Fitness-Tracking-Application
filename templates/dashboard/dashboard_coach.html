@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Coach — Fitness Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-person-badge"></i> Dashboard Coach</h2>
+  <span class="text-muted">Benvenuto, <strong>{{ request.user.username }}</strong></span>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header">
+        <strong><i class="bi bi-people"></i> I tuoi Clienti</strong>
+      </div>
+      <div class="card-body p-0">
+        {% if assigned_users %}
+          <div class="list-group list-group-flush">
+            {% for assignment in assigned_users %}
+              <a href="{% url 'coach_user_detail' assignment.user.pk %}" class="list-group-item list-group-item-action">
+                <div class="d-flex align-items-center gap-3">
+                  {% if assignment.user.avatar %}
+                    <img src="{{ assignment.user.avatar.url }}" class="rounded-circle" width="40" height="40" alt="">
+                  {% else %}
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                      <i class="bi bi-person text-white"></i>
+                    </div>
+                  {% endif %}
+                  <div>
+                    <div class="fw-semibold">{{ assignment.user.username }}</div>
+                    <small class="text-muted">Assegnato: {{ assignment.assigned_at|date:"d/m/Y" }}</small>
+                  </div>
+                  <i class="bi bi-chevron-right ms-auto text-muted"></i>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted text-center py-3">Nessun cliente assegnato.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">
+        <strong><i class="bi bi-chat-dots"></i> Feedback Recenti</strong>
+      </div>
+      <div class="card-body">
+        {% for fb in recent_feedbacks %}
+          <div class="border-bottom mb-2 pb-2">
+            <div class="d-flex justify-content-between">
+              <small class="fw-semibold text-primary">{{ fb.user.username }}</small>
+              <small class="text-muted">{{ fb.date }}</small>
+            </div>
+            <p class="mb-0 small">{{ fb.message }}</p>
+          </div>
+        {% empty %}
+          <p class="text-muted text-center">Nessun feedback inviato.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
