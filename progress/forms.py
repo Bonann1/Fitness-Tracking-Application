@@ -8,6 +8,12 @@ class ProgressEntryForm(forms.ModelForm):
     class Meta:
         model = ProgressEntry
         fields = ('date', 'value', 'goal', 'notes')
+        labels = {
+            'date': 'Data',
+            'value': 'Valore',
+            'goal': 'Obiettivo',
+            'notes': 'Note',
+        }
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'notes': forms.Textarea(attrs={'rows': 3}),

@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from .models import CustomUser, CoachAssignment, CoachFeedback
 from .forms import RegisterForm, ProfileUpdateForm, CoachFeedbackForm
+from workouts.views import FriendlyPermissionDeniedMixin
 
 
 class CustomLoginView(LoginView):
@@ -59,7 +60,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class CoachClientListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class CoachClientListView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, ListView):
     template_name = 'users/coach_clients.html'
     context_object_name = 'assignments'
 
@@ -93,7 +94,7 @@ def coach_user_detail(request, user_id):
     return render(request, 'users/coach_user_detail.html', context)
 
 
-class CoachFeedbackCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CoachFeedbackCreateView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, CreateView):
     model = CoachFeedback
     form_class = CoachFeedbackForm
     template_name = 'users/feedback_form.html'

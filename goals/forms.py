@@ -6,6 +6,15 @@ class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
         fields = ('title', 'description', 'goal_type', 'metric', 'target_value', 'deadline', 'status')
+        labels = {
+            'title': 'Titolo',
+            'description': 'Descrizione',
+            'goal_type': 'Tipo obiettivo',
+            'metric': 'Metrica',
+            'target_value': 'Valore target',
+            'deadline': 'Scadenza',
+            'status': 'Stato',
+        }
         widgets = {
             'deadline': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 3}),

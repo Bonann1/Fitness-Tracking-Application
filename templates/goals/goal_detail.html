@@ -10,7 +10,7 @@
       </span>
       <span class="badge bg-light text-dark border">{{ goal.get_goal_type_display }}</span>
       {% if goal.goal_type == 'metric' %}
-        <span class="text-muted small">{{ goal.get_metric_display }} — Target: <strong>{{ goal.target_value }}</strong></span>
+        <span class="text-muted small">{{ goal.get_metric_display }} — Obiettivo: <strong>{{ goal.target_value }}</strong></span>
       {% endif %}
       {% if goal.deadline %}
         <span class="text-muted small"><i class="bi bi-calendar3"></i> Scadenza: {{ goal.deadline }}</span>
@@ -102,7 +102,7 @@
         },
         {% if chart_target %}
         {
-          label: 'Target ({{ goal.target_value }})',
+          label: 'Obiettivo ({{ goal.target_value }})',
           data: Array({{ chart_dates|length }}).fill({{ chart_target }}),
           borderDash: [6, 4],
           borderColor: '#dc3545',

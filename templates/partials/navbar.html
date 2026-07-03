@@ -14,20 +14,20 @@
           </li>
           {% if user.role == 'coach' %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> My Workouts</a>
+              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> I miei Workout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'coach_clients' %}"><i class="bi bi-people"></i> My Clients</a>
+              <a class="nav-link" href="{% url 'coach_clients' %}"><i class="bi bi-people"></i> I miei Clienti</a>
             </li>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> Workouts</a>
+              <a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-lightning"></i> Workout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'progress_list' %}"><i class="bi bi-graph-up"></i> Progress</a>
+              <a class="nav-link" href="{% url 'progress_list' %}"><i class="bi bi-graph-up"></i> Progressi</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'goal_list' %}"><i class="bi bi-trophy"></i> Goals</a>
+              <a class="nav-link" href="{% url 'goal_list' %}"><i class="bi bi-trophy"></i> Obiettivi</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'feedback_list' %}"><i class="bi bi-chat-dots"></i> Feedback</a>
@@ -43,11 +43,11 @@
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="d-inline">
               {% csrf_token %}
-              <button type="submit" class="btn btn-link nav-link"><i class="bi bi-box-arrow-right"></i> Logout</button>
+              <button type="submit" class="btn btn-link nav-link"><i class="bi bi-box-arrow-right"></i> Esci</button>
             </form>
           </li>
         {% else %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Accedi</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Registrati</a></li>
         {% endif %}
       </ul>

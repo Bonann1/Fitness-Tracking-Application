@@ -1,10 +1,11 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from .models import ProgressEntry
 from .forms import ProgressEntryForm
+from workouts.views import FriendlyPermissionDeniedMixin
 
 
 class ProgressListView(LoginRequiredMixin, ListView):
@@ -35,7 +36,7 @@ class ProgressCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProgressUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ProgressUpdateView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, UpdateView):
     model = ProgressEntry
     form_class = ProgressEntryForm
     template_name = 'progress/progress_form.html'
@@ -54,7 +55,7 @@ class ProgressUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProgressDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ProgressDeleteView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, DeleteView):
     model = ProgressEntry
     template_name = 'progress/progress_confirm_delete.html'
     success_url = reverse_lazy('progress_list')

@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from .models import Goal
 from .forms import GoalForm
 from progress.models import ProgressEntry
+from workouts.views import FriendlyPermissionDeniedMixin
 
 
 class GoalListView(LoginRequiredMixin, ListView):
@@ -50,7 +51,7 @@ class GoalCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class GoalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class GoalUpdateView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, UpdateView):
     model = Goal
     form_class = GoalForm
     template_name = 'goals/goal_form.html'
@@ -66,7 +67,7 @@ class GoalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('goal_detail', kwargs={'pk': self.object.pk})
 
 
-class GoalDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class GoalDeleteView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, DeleteView):
     model = Goal
     template_name = 'goals/goal_confirm_delete.html'
     success_url = reverse_lazy('goal_list')

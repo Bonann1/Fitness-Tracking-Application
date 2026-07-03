@@ -4,7 +4,7 @@ from django.conf import settings
 
 
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = [('standard', 'Standard User'), ('coach', 'Coach')]
+    ROLE_CHOICES = [('standard', 'Utente Standard'), ('coach', 'Coach')]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='standard')
     bio = models.TextField(blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)

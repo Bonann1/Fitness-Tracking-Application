@@ -6,7 +6,7 @@
         <br>
         <small class="text-muted">
           {% if goal.goal_type == 'metric' %}
-            <i class="bi bi-bullseye"></i> Target: {{ goal.target_value }} {{ goal.get_metric_display }}
+            <i class="bi bi-bullseye"></i> Obiettivo: {{ goal.target_value }} {{ goal.get_metric_display }}
           {% else %}
             <i class="bi bi-check2-circle"></i> Generico
           {% endif %}

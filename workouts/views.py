@@ -8,6 +8,17 @@ from .forms import WorkoutForm, WorkoutExerciseForm
 from users.models import CoachAssignment
 
 
+class FriendlyPermissionDeniedMixin:
+    permission_denied_message = 'Non hai i permessi per eseguire questa azione.'
+    permission_denied_redirect = 'dashboard'
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            messages.error(self.request, self.permission_denied_message)
+            return redirect(self.permission_denied_redirect)
+        return super().handle_no_permission()
+
+
 class WorkoutListView(LoginRequiredMixin, ListView):
     model = Workout
     template_name = 'workouts/workout_list.html'
@@ -49,7 +60,7 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
         return reverse('workout_detail', kwargs={'pk': self.object.pk})
 
 
-class WorkoutUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class WorkoutUpdateView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, UpdateView):
     model = Workout
     form_class = WorkoutForm
     template_name = 'workouts/workout_form.html'
@@ -65,6 +76,7 @@ class WorkoutUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return is_owner or is_assigned_coach
 
     def form_valid(self, form):
+        form.instance.user = self.get_object().user
         messages.success(self.request, 'Workout aggiornato con successo.')
         return super().form_valid(form)
 
@@ -72,7 +84,7 @@ class WorkoutUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('workout_detail', kwargs={'pk': self.object.pk})
 
 
-class WorkoutDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class WorkoutDeleteView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, DeleteView):
     model = Workout
     template_name = 'workouts/workout_confirm_delete.html'
     success_url = reverse_lazy('workout_list')
@@ -105,7 +117,7 @@ class ExerciseCreateView(LoginRequiredMixin, CreateView):
         return reverse('workout_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class ExerciseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ExerciseDeleteView(LoginRequiredMixin, FriendlyPermissionDeniedMixin, UserPassesTestMixin, DeleteView):
     model = WorkoutExercise
     template_name = 'workouts/exercise_confirm_delete.html'
     pk_url_kwarg = 'epk'

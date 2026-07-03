@@ -26,7 +26,7 @@
             <div class="small text-muted">
               <span class="badge bg-light text-dark border">{{ goal.get_goal_type_display }}</span>
               {% if goal.goal_type == 'metric' %}
-                &nbsp; Target: <strong>{{ goal.target_value }} {{ goal.get_metric_display }}</strong>
+                &nbsp; Obiettivo: <strong>{{ goal.target_value }} {{ goal.get_metric_display }}</strong>
               {% endif %}
               {% if goal.deadline %}&nbsp; Scadenza: {{ goal.deadline }}{% endif %}
             </div>
