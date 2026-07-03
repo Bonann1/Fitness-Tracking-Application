@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect
+from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
@@ -36,7 +37,13 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'workout'
 
     def get_queryset(self):
-        return Workout.objects.filter(user=self.request.user)
+        user = self.request.user
+        if user.role == 'coach':
+            assigned_ids = CoachAssignment.objects.filter(
+                coach=user
+            ).values_list('user_id', flat=True)
+            return Workout.objects.filter(Q(user=user) | Q(user_id__in=assigned_ids))
+        return Workout.objects.filter(user=user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

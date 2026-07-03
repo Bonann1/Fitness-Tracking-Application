@@ -1,1 +1,16 @@
 /.claude
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+.env
+.DS_Store
+*.log
+staticfiles/
+media/
+*.sqlite3-journal
+Progetti Esercitazione Back-end PPM 2026.pdf
