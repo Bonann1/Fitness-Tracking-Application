@@ -80,7 +80,7 @@ con esercizi associati, goal generico + goal a metrica con 5 progress entry, e
 
 ## Deployment
 
-URL online: **`<inserire qui l'URL Render dopo il deploy>`**
+URL online: **https://fitness-tracking-application-2-gcfv.onrender.com**
 
 
 Il progetto è pronto per il deploy su Render (free tier):
