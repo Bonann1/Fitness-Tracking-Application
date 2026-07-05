@@ -45,7 +45,7 @@ inviare loro feedback testuali.
 ## Setup locale
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Bonann1/Fitness-Tracking-Application
 cd Fitness-Tracking-Application
 python3 -m venv venv
 source venv/bin/activate          # su Windows: venv\Scripts\activate
@@ -94,7 +94,6 @@ Il progetto è pronto per il deploy su Render (free tier):
    - Variabili d'ambiente:
      - `DJANGO_SECRET_KEY` = una stringa random sicura
      - `DJANGO_DEBUG` = `False`
-     - `DJANGO_ALLOWED_HOSTS` = `.onrender.com,localhost,127.0.0.1`
      - `DJANGO_CSRF_TRUSTED_ORIGINS` = `https://<nome-app>.onrender.com`
 4. Deploy. Il `db.sqlite3` pre-popolato viene incluso nello slug, quindi i demo
    account funzioneranno subito anche online.
